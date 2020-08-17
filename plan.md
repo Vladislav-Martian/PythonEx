@@ -18,6 +18,13 @@ def functa(mytrash=None, **kwargs):
     it()
     return mytrash
 
+@z.Name3.extend("Overnaming", "descriptions and docstrings will be set automatically")
+def functa(mytrash=None, **kwargs):
+    just()
+    do()
+    it()
+    return mytrash
+
 #after it:
 z.Name3.functa() #It`s works!!!
 
