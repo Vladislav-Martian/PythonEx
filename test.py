@@ -1,15 +1,3 @@
-# PythonEx
-Experiments with Python. Reinventing the wheels =Ь.
-
-# Events module
-## Classes:
-1. delegate
-2. Event
-3. evented
-
-Examples:
-1. delegate:
-```python
 from PyEx.Events import delegate, Event, evented
 
 # 4 dummy functions
@@ -51,29 +39,5 @@ print(".invoke Method result:")
 actions.invoke(2240)
 print("call Method result:")
 actions(2240)
-```
-Result:
-```
-actions: Delegate [2 / inf]
-actions2: Delegate [5 / 8]
-Summation of delegates:
-actions + actions2 merging: Delegate [7 / inf]
-.invoke Method result:
-f1: 2240
-f2: 2240
-f3: 2240
-f4: 2240
-f3: 2240
-f2: 2240
-f1: 2240
-Function in delegate in called delegate: 2240
-call Method result:
-f1: 2240
-f2: 2240
-f3: 2240
-f4: 2240
-f3: 2240
-f2: 2240
-f1: 2240
-Function in delegate in called delegate: 2240
-```
+
+
