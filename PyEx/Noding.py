@@ -61,7 +61,7 @@ class Node(evented):
         self.__desc__ = desc
         func.__doc__ = desc
         self.__inname__ = name
-        self.__case__ = False
+        self.__case__ = True
     
     # Standart:
     def __bool__(self):
@@ -73,7 +73,14 @@ class Node(evented):
     def __len__(self):
         return self.grade()
     def __contains__(self, name):
-        return name in self.__subs__
+        if self.__case__:
+            return name in self.__subs__
+        else:
+            name = name.lower()
+            for key in self.__subs__:
+                if key.lower() == name:
+                    return True
+            return False
     # informators
     def grade(self):
         i = 0
@@ -106,8 +113,13 @@ class Node(evented):
     def getParent(self):
         return self.__parent__
     def getSubNode(self, name):
-        if name in self.__subs__:
+        if self.__case__ and name in self.__subs__:
             return self.__subs__[name]
+        elif not self.__case__ and name in self:
+            nm = name.lower()
+            for key in self.__subs__:
+                if key.lower() == nm:
+                    self.__subs__[key]
         else:
             raise AccessError(f"Sub-node '{name}' does not exist")
     # methods
@@ -124,12 +136,19 @@ class Node(evented):
             return node
         else:
             return node
+    def setcase(self, case=None):
+        if case == None:
+            case = not self.__case__
+        self.__case__ = bool(case)
+        for node in self.__subs__:
+            self.__subs__[node].setcase(case)
+        return self
     # overloads
     def __call__(self, *args, **kwargs):
         self.__core__(*args, **kwargs)
         self.eventlaunch("invoking", EventInvoking(*args, **kwargs))
     def __getattr__(self, name):
-        if name in self.__subs__:
+        if name in self:
             return self.getSubNode(name)
         else:
             raise AttributeError(f"Attribute '{name}' does not exists, and sub-node does not exist too")
@@ -201,4 +220,40 @@ class Node(evented):
             res = Node(func, arg1, arg2)
             self.insertNode(res)
             return res
+        return wrapper
+    
+    def expand(self, arg1, arg2=""):
+        '''Decorator to convert function to root node
+        Using:
+        @Node.setup
+        def func():
+            pass
+        
+        or:
+        @Node.setup([str]name, [str]desc)
+        def func():
+            pass
+
+        after:
+        @func.extend
+        def subfunc():
+            pass
+
+        or:
+        @func.extend([str]name, [str]desc)
+        def subfunc():
+            pass
+        '''
+        if callable(arg1):
+            res = Node(arg1)
+            self.insertNode(res)
+            return None
+        # other way, arg1 is name and arg2 is description
+        instry(arg1, str)  # throws error if type is wrong
+        instry(arg2, str)  # throws error if type is wrong
+
+        def wrapper(func):
+            res = Node(func, arg1, arg2)
+            self.insertNode(res)
+            return None
         return wrapper
