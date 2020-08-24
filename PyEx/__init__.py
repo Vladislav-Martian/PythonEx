@@ -4,3 +4,5 @@ from PyEx.Events import delegate, Event, evented
 from PyEx.Errors import Error, AccessError, ParsingError, TypingError, instry
 # Noding module
 from PyEx.Noding import Node
+# Exelent timing
+from PyEx.Etime import Etime
