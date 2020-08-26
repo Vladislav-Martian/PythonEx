@@ -410,6 +410,12 @@ class cmdl(object):
         res += '.'.join(self.cstack) + ": "
         if len(self.args) > 0:
             for arg in self.args:
+                if arg == None:
+                    res += "null "
+                    continue
+                elif isinstance(arg, bool):
+                    res += repr(arg).lower()
+                    continue
                 res += repr(arg) + " "
         if len(self.flags) > 0:
             res += f'#{self.flags} '
@@ -441,9 +447,9 @@ class cmdl(object):
                 elif isinstance(arg, tag):
                     res += Fore.LIGHTYELLOW_EX + repr(arg) + Fore.RESET
                 elif isinstance(arg, bool):
-                    res += Fore.RED + repr(arg) + Fore.RED
+                    res += Fore.RED + repr(arg).lower() + Fore.RED
                 elif arg == None:
-                    res += Fore.BLUE + repr(arg) + Fore.RESET
+                    res += Fore.BLUE + "null" + Fore.RESET
                 res += ' '
         if len(self.flags) > 0:
             res += f'{Fore.CYAN}#{self.flags}{Fore.RESET} '

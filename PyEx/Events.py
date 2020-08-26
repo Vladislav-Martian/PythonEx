@@ -188,6 +188,19 @@ class Event(object):
         else:
             Event.globalhandler(self)
     
+    def __getattr__(self, name):
+        if name in self.kwargs:
+            return self.kwargs[name]
+        raise AttributeError(f"Attribute {name} does not exist")
+
+    def __getitem__(self, i):
+        if isinstance(i, str):
+            return self.__getattr__(i)
+        elif isinstance(i, int):
+            return self.args[i]
+        else:
+            raise KeyError(f"Unknown key [{i}]")
+
     def __repr__(self):
         return f"{self.__class__.__name__} as <{self.like}> on {repr(self.this)} [{self.handled}]"
 
